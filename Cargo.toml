@@ -4,10 +4,10 @@ version = "1.0.0"
 edition = "2024"
 
 [dependencies]
-bevy_app = "0.16.0"
-bevy_asset = "0.16.0"
-bevy_ecs = "0.16.0"
-bevy_state = "0.16.0"
+bevy_app = "0.17"
+bevy_asset = "0.17"
+bevy_ecs = "0.17"
+bevy_state = "0.17"
 load_assets = {path = "load_assets" }
 
 [workspace]

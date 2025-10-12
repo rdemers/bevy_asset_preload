@@ -48,7 +48,7 @@ impl<LoadingState: States + FreelyMutableState, NextState: States + FreelyMutabl
 impl<LoadingState: States + FreelyMutableState, NextState: States + FreelyMutableState> Plugin for AssetPreloadPlugin<LoadingState, NextState> {
     fn build(&self, app: &mut App) {
         app
-            .add_event::<AssetPreloadUpdate>()
+            .add_message::<AssetPreloadUpdate>()
             .add_systems(
                 OnEnter(self.loading_state.clone()),
                 start_asset_loading(self.path_source.clone()),
@@ -61,7 +61,7 @@ impl<LoadingState: States + FreelyMutableState, NextState: States + FreelyMutabl
     }
 }
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct AssetPreloadUpdate {
     /// The amount of assets which are already loaded
     pub num_loaded: usize,
@@ -142,7 +142,7 @@ fn load_asset_paths_recursive(path: &Path) -> io::Result<Vec<String>> {
     Ok(files)
 }
 
-fn switch_state_when_all_loaded<S: States + FreelyMutableState>(followup_state: S) -> impl Fn(Res<AssetServer>, Res<LoadedAssets>, EventWriter<AssetPreloadUpdate>, ResMut<NextState<S>>) {
+fn switch_state_when_all_loaded<S: States + FreelyMutableState>(followup_state: S) -> impl Fn(Res<AssetServer>, Res<LoadedAssets>, MessageWriter<AssetPreloadUpdate>, ResMut<NextState<S>>) {
     move |asset_server, loaded_assets, mut event_writer, mut next_state| {
         let num_loaded = loaded_assets
             .iter()
